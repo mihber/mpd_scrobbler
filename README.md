@@ -1,2 +1,2 @@
 # mpd_scrobbler
-Scrobbles to Last.fm currently playing from mpd.
+Scrobbles to Last.fm currently playing song from mpd.
