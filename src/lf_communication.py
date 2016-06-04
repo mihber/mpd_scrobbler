@@ -18,6 +18,7 @@ def generate_api_sig(params):
     signature = hashlib.md5()
 
     for key in sorted(params.keys()):
+        print(key)
         signature.update((key + params[key]).encode('utf-8'))
     signature.update(shared_secret.encode('utf-8'))
     
@@ -51,6 +52,7 @@ def get_token():
         return auth_token
         
 def authenticate():
+    global session_key
 
     auth_token = get_token()
     webbrowser.open(AUTH_URL + auth_token)
