@@ -72,8 +72,8 @@ def scrobble(artist, name, album = None):
     
     params['artist']    = artist
     params['track']     = name
-    params['timestamp'] = int(time.time())
-    if album is not None:
+    params['timestamp'] = str(int(time.time()))
+    if album != None:
         params['album'] = album
     params['sk']        = session_key
         
