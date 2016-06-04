@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 import webbrowser
 import requests
 import hashlib
+import time
 import os
 
 ROOT_URL        = 'http://ws.audioscrobbler.com/2.0/'
@@ -9,6 +10,9 @@ AUTH_URL        = 'http://www.last.fm/api/auth/?api_key=a8a27d8d80f66d653d19e64d
 
 api_key         = 'a8a27d8d80f66d653d19e64dd16bee5a'
 shared_secret   = 'af3d49a4107352174bb6fead328e82e1'
+auth_token      = None
+session_key     = None
+username        = None
 
 
 def generate_api_sig(params):
@@ -45,5 +49,32 @@ def get_token():
     else:
         auth_token = token_result[0].text
         print("Received authentication token", auth_token)
-        return auth_token
+        return True
+        
+def authenticate():
 
+    webbrowser.open(AUTH_URL + auth_token)
+    raw_input("Press enter after accepting the request...")
+    
+    sk_result = call_method('auth.getSession', {'token' : auth_token})
+    username    = sk_result[0][0].text
+    session_key = sk_result[0][1].text
+    
+    print('Authenticated user ' + username)
+    
+    with open('.user_data', 'w') as f:
+        f.write(username + '\n' +
+                session_key)
+
+
+def scrobble(artist, name, album = None):
+    params = {}
+    
+    params['artist']    = artist
+    params['track']     = name
+    params['timestamp'] = int(time.time())
+    if album is not None:
+        params['album'] = album
+    params['sk']        = session_key
+        
+    call_method('track.scrobble', params)
