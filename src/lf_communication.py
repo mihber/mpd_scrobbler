@@ -10,7 +10,6 @@ AUTH_URL        = 'http://www.last.fm/api/auth/?api_key=a8a27d8d80f66d653d19e64d
 
 api_key         = 'a8a27d8d80f66d653d19e64dd16bee5a'
 shared_secret   = 'af3d49a4107352174bb6fead328e82e1'
-auth_token      = None
 session_key     = None
 username        = None
 
@@ -48,11 +47,12 @@ def get_token():
 
     else:
         auth_token = token_result[0].text
-        print("Received authentication token", auth_token)
-        return True
+        print("Received authentication token " + auth_token)
+        return auth_token
         
 def authenticate():
 
+    auth_token = get_token()
     webbrowser.open(AUTH_URL + auth_token)
     raw_input("Press enter after accepting the request...")
     
